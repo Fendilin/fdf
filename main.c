@@ -1,63 +1,116 @@
 
 #include "fdf.h"
 
-static int	ft_count_lines(char	*file)
+static int		ft_fdf_count_columns(char *file)
 {
-	char	*str;
-	int		i;
-	int		j;
 	int		fd;
+	int		i;
+	char	*str;
+	char	**split;
+
+	i = 0;
+	fd = open(file, O_RDONLY);
+	if (fd < 0)
+		return (-1);
+	get_next_line(fd, &str);
+	split = ft_strsplit(str, ' ');
+	ft_strdel(&str);
+	while (split[i] != NULL)
+		i++;
+	free(split);
+	close(fd);
+	return (i);
+}
+
+static int		ft_fdf_count_lines(char *file)
+{
+	int 	fd;
+	int 	i;
+	int		j;
+	char	*str;
 
 	fd = open(file, O_RDONLY);
+	if (fd < 0)
+		return (-1);
+	j = 0;
 	while ((i = get_next_line(fd, &str)) > 0)
 	{
 		j++;
 		ft_strdel(&str);
 	}
 	if (i == -1)
-		return (-1);
+		return(-1);
 	close(fd);
 	return (j);
 }
 
-static char	**ft_get_map(int fd, int nbrlines)
+static int	**ft_fdf_get_map(char *file)
 {
-	char		*str;
-	int			i;
-	int			n;
-	char 		**ret;
+	int		nbr_lines;
+	int		nbr_columns;
+	int		fd;
+	char	*str;
+	char	**split;
+	int		**map;
+	int		y;
+	int		x;
 
-	n = 0;
-	ret = (char**)malloc(sizeof(char**) * nbrlines + 1);
-	if (ret == NULL)
-		return (NULL);
-	while ((i = get_next_line(fd, &str)) > 0)
-	{
-		ret[n++] = ft_strdup(str);
-		if (ret[n] == NULL)
-			return (NULL);
-		ft_strdel(&str);
-	}
-	ret[nbrlines] = NULL;
-	return (ret);
-}
-
-int	main(int argc, char **argv)
-{
-	(void)argc;
-	int 	fd;
-	int		nbrlines;
-	char 	**map;
-	
-	nbrlines = ft_count_lines(argv[1]);
-	fd = open(argv[1], O_RDONLY);
+	fd = open(file, O_RDONLY);
 	if (fd < 0)
-		return (-1);
-	map = ft_get_map(fd, nbrlines);
-	while (*map)
+		return (NULL);
+	y = 0;
+	x = 0;
+	nbr_lines = ft_fdf_count_lines(file);
+	nbr_columns = ft_fdf_count_columns(file);
+	map = (int**)malloc(sizeof(int**) * nbr_lines);
+	*map = (int*)malloc(sizeof(int*) * nbr_columns);
+	while (y < nbr_lines)
 	{
-		ft_putendl(*map++);
+		get_next_line(fd, &str);
+		split = ft_strsplit(str, ' ');
+		ft_strdel(&str);
+		while (x < nbr_columns)
+		{
+			map[y][x] = ft_atoi(split[x]);
+			ft_putnbr(map[y][x]);
+			ft_putstr("  ");
+			free(split[x]);
+			x++;
+		}
+		free(split);
+		ft_putchar('\n');
+		y++;
+		x = 0;
 	}
 	close(fd);
+	return (map);
+}
+
+int						main(int argc, char **argv)
+{
+	(void)argc;
+	char	*file;
+	int	**map;
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	if (argv[1] == NULL)
+		return (-1);
+	file = argv[1];
+	map = ft_fdf_get_map(file);
+	while (i < ft_fdf_count_lines(file))
+	{
+		while (j < ft_fdf_count_columns(file))
+		{
+			ft_putnbr(map[i][j]);
+			ft_putchar(' ');
+			j++;
+		}
+		ft_putchar('\n');
+		i++;
+		j = 0;
+	}
 	return (0);
 }
