@@ -6,7 +6,7 @@
 /*   By: vterzian <vterzian@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/12 15:03:54 by vterzian          #+#    #+#             */
-/*   Updated: 2014/12/12 17:31:16 by vterzian         ###   ########.fr       */
+/*   Updated: 2014/12/12 19:07:30 by vterzian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int		*ft_fdf_fill_map(char **split, int len)
 	return (line);
 }
 
-t_map	ft_fdf_get_line(t_map map, char	*line, int i)
+t_map	*ft_fdf_get_line(t_map *map, char *line, int i)
 {
 	char	**split;
 	int		nbr_columns;
@@ -59,9 +59,9 @@ t_map	ft_fdf_get_line(t_map map, char	*line, int i)
 	return (map);
 }
 
-t_map	ft_fdf_get_map(char	*file)
+t_map	*ft_fdf_get_map(char	*file)
 {
-	t_map	map;
+	t_map	*map;
 	char	*line;
 	int		i;
 	int		fd;
@@ -69,7 +69,7 @@ t_map	ft_fdf_get_map(char	*file)
 	i = 0;
 	map = malloc(sizeof(t_map*));
 	map->height = ft_fdf_count_line(file);
-	map->map = (int**)malloc(sizeof(int**) * map->height);
+	map->data = (int**)malloc(sizeof(int**) * map->height);
 	fd = open(file, O_RDONLY);
 	while (get_next_line(fd, &line) > 0)
 	{
