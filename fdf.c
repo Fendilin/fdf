@@ -5,20 +5,25 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vterzian <vterzian@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2014/12/12 13:21:34 by vterzian          #+#    #+#             */
-/*   Updated: 2014/12/12 17:09:28 by vterzian         ###   ########.fr       */
+/*   Created: 2014/12/10 13:25:27 by vterzian          #+#    #+#             */
+/*   Updated: 2014/12/12 17:31:21 by vterzian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int		main(int argc, char **argv)
+int		ft_fdf_lauch(char *file, t_env *env)
 {
-	t_env	env;
+	env->file = file;
+	env->win = NULL;
+	env->mlx = mlx_init();
+	env->width = W_WIDTH;
+	env->height = W_HEIGHT;
+	env->map = ft_fdf_get_map(env->file);
 
-	if (argv[1] != NULL)
+	if (util->mlx != NULL)
 	{
-		ft_fdf_lauch(argv[1], env);
+		util->win = mlx_new_window(env->mlx, env->width, env->height, "MY_FDF");
+		mlx_loop(env->mlx);
 	}
-	return (0);
 }

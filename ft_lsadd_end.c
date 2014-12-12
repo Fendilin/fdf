@@ -1,24 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_lsadd_end.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vterzian <vterzian@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2014/12/12 13:21:34 by vterzian          #+#    #+#             */
-/*   Updated: 2014/12/12 17:09:28 by vterzian         ###   ########.fr       */
+/*   Created: 2014/12/11 14:48:33 by vterzian          #+#    #+#             */
+/*   Updated: 2014/12/12 13:20:26 by vterzian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int		main(int argc, char **argv)
+s_line	ft_lsadd_end(s_line list, int *tabint, int size)
 {
-	t_env	env;
+	s_line new_node;
+	s_line tmp;
 
-	if (argv[1] != NULL)
-	{
-		ft_fdf_lauch(argv[1], env);
-	}
-	return (0);
+	new_node = malloc(sizeof(s_line));
+	new_node->*tabint = tabint;
+	new_node->size = size;
+	new_node->next = NULL;
+	if (list == NULL)
+		return (new_node);
+	tmp = list;
+	while (tmp->next != NULL)
+		tmp = tmp->next;
+	tmp->next = new_node;
+	return (list);
 }
