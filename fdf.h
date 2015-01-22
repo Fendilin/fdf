@@ -6,7 +6,7 @@
 /*   By: vterzian <vterzian@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/10 13:25:22 by vterzian          #+#    #+#             */
-/*   Updated: 2015/01/14 16:50:27 by vterzian         ###   ########.fr       */
+/*   Updated: 2015/01/22 16:29:42 by vterzian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,14 @@
 
 # include "mlx.h"
 # include <fcntl.h>
+# include <math.h>
 # include "get_next_line.h"
 
 # define	W_WIDTH		1900
 # define	W_HEIGHT	1200
-# define	SPACE		50
-# define	DEEP		1
-# define	COLOR		0x00FF00
+# define	SPACE		20
+# define	DEEP		0
+# define	COLOR		0x3D63FF
 # define	CTE1		0.7
 # define	CTE2		0.9
 
@@ -32,8 +33,8 @@ struct	s_3d
 	float		y;
 	float		dx;
 	float		dy;
-	float		dz;
-	float		z;
+	int			dz;
+	int			z;
 	t_3d	*next;
 };
 
@@ -44,6 +45,8 @@ struct	s_2d
 	float		y;
 	float		dx;
 	float		dy;
+	int			z;
+	int			dz;
 	t_2d	*next;
 };
 
@@ -93,7 +96,11 @@ int		ft_expose_hook(t_env *env);
 void	ft_draw_data(t_env *env);
 void	ft_draw_line(t_env *env, t_2d *pt3d);
 void	ft_draw_y(t_env *env, t_2d *pt3d);
+t_3d	*ft_malloc_3d(t_3d *pt3d, int x, int y);
+t_3d	*ft_fill_3d(t_env *env, t_3d *pt3d, int x, int y);
 t_3d	*ft_set_3d(t_env *env);
+t_2d	*ft_malloc_iso(t_2d *pt2d, int x, int y);
+t_2d	*ft_fill_iso(t_env *env, t_2d *pt2d, t_3d *pt3d);
 t_2d	*ft_set_iso(t_env *env, t_3d *pt3d); 
 void	ft_put_pixel_to_img(unsigned long color, t_env *env, int x, int y);
 

@@ -6,7 +6,7 @@
 /*   By: vterzian <vterzian@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/12 15:03:54 by vterzian          #+#    #+#             */
-/*   Updated: 2015/01/14 15:40:28 by vterzian         ###   ########.fr       */
+/*   Updated: 2015/01/22 15:18:05 by vterzian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,18 +58,17 @@ int		*ft_fdf_fill_map(char **split, int len)
 	int	tmp;
 	int i;
 
-	i = 1;
-	line = (int*)malloc(sizeof(int*) * len + 1);
-	line[0] = len;
+	i = 0;
+	line = (int*)malloc(sizeof(int*) * len);
 	while (i < len + 1)
 	{
-		if (split[i - 1] == NULL && i  < len + 1)
-			line[i] = 0;
-		else
+		if (split[i])
 		{
-			tmp = ft_atoi(split[i - 1]);
+			tmp = ft_atoi(split[i]);
 			line[i] = tmp;
 		}
+		else
+			line[i] = 0;
 		i++;
 	}
 	return (line);

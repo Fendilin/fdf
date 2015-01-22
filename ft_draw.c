@@ -6,7 +6,7 @@
 /*   By: vterzian <vterzian@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/12/15 13:23:34 by vterzian          #+#    #+#             */
-/*   Updated: 2015/01/14 16:28:10 by vterzian         ###   ########.fr       */
+/*   Updated: 2015/01/22 16:21:58 by vterzian         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,21 @@
 
 void	ft_draw_y(t_env *env, t_2d *pt3d)
 {
-	int	x1;
-	int	y1;
-	int	x2;
-	int	y2;
-	int y;
+	float	x1;
+	float	y1;
+	float	x2;
+	float	y2;
+	float	y;
 
 	x1 = pt3d->dx;
 	y1 = pt3d->dy;
 	y = y1;
 	x2 = pt3d->x;
 	y2 = pt3d->y;
+	
 	while (y >= y2)
 	{
-		ft_put_pixel_to_img(0xFFFFFF, env,
+		ft_put_pixel_to_img(COLOR + (pt3d->z * 6), env,
 		x1 + ((x2 - x1) * (y - y1)) / (y2 - y1), y);
 		y--;
 	}
@@ -35,12 +36,12 @@ void	ft_draw_y(t_env *env, t_2d *pt3d)
 
 void	ft_draw_line(t_env *env, t_2d *pt3d)
 {
-	int	x1;
-	int	y1;
-	int	x2;
-	int	y2;
-	int	x;
-
+	float	x1;
+	float	y1;
+	float	x2;
+	float	y2;
+	float	x;
+	
 	x1 = pt3d->x;
 	x = x1;
 	y1 = pt3d->y;
@@ -48,88 +49,12 @@ void	ft_draw_line(t_env *env, t_2d *pt3d)
 	y2 = pt3d->next->y;
 	while (x <= x2)
 	{
-		ft_put_pixel_to_img(0xFFFFFF, env, x,
-		y1 + ((y2 - y1) * (x - x1)) / (x2 - x1));
-		x++;
-	}
-}
-
-t_2d	*ft_set_iso(t_env *env, t_3d *pt3d)
-{
-	int		x;
-	int		y;
-	t_2d	*pt2d;
-	t_2d	*tmp;
-
-	y = 0;
-	while (env->map->height > y)
-	{
-		x = 1;
-		while (env->map->data[y][0] >= x)
-		{
-			if (x == 1 && y == 0)
-			{
-				pt2d = malloc(sizeof(*pt2d));
-				tmp = pt2d;
-			}
-			else
-			{
-				pt2d->next = malloc(sizeof(*pt2d));
-				pt2d = pt2d->next;
-				pt3d = pt3d->next;
-			}
-			pt2d->x = CTE1 * pt3d->x - CTE2 * pt3d->y + env->startx;
-			pt2d->y = pt3d->z * env->deep + (CTE1 / 2) * pt3d->x + (CTE2 / 2) * pt3d->y + env->starty;
-			pt2d->dx = CTE1 * pt3d->dx - CTE2 * pt3d->dy + env->startx;
-			pt2d->dy = pt3d->dz * env->deep
-			+ (CTE1 / 2) * pt3d->dx + (CTE2 / 2) * pt3d->dy + env->starty;
-			pt2d->next = NULL;
+			ft_put_pixel_to_img(COLOR + (pt3d->z * 6), env, x,
+			y1 + ((y2 - y1) * (x - x1)) / (x2 - x1));
 			x++;
-		}
-		y++;
 	}
-	return (tmp);
 }
 
-t_3d	*ft_set_3d(t_env *env)
-{
-	int				x;
-	int				y;
-	t_3d			*pt3d;
-	t_3d			*tmp;
-
-	y = 0;
-	while (env->map->height > y)
-	{
-		x = 1;
-		while (x <= env->map->data[y][0])
-		{
-			if (x == 1 && y == 0)
-			{
-				pt3d = malloc(sizeof(*pt3d));
-				tmp = pt3d;
-			}
-			else
-			{
-				pt3d->next = malloc(sizeof(*pt3d));
-				pt3d = pt3d->next;
-			}
-			pt3d->x = x * env->space;
-			pt3d->y = y * env->space;
-			if (y + 1 < env->map->height)
-			{
-				pt3d->dx = pt3d->x;
-				pt3d->dy = (y + 1) * env->space;
-				pt3d->dz = env->map->data[y + 1][x];
-			}
-			pt3d->z = env->map->data[y][x];
-			pt3d->next = NULL;
-			x++;
-		}
-		y++;
-	}
-	return (tmp);
-}
 
 void	ft_put_pixel_to_img(unsigned long color, t_env *env, int x, int y)
 {
